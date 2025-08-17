@@ -1,0 +1,54 @@
+Y = []  //create a blank array, Y, in which to store target nodes of outgoing paths
+W = []  //create a blank array, W, in which to store outgoing paths
+def Target(arg1) {  //define a function, Target, to get the Target nodes of an ActivityNode
+    M = arg1.getOutgoing()  //get outgoing paths, M, from the ActivityNode  
+    try {   //use "try" to test if an expression returns an error
+        N = arg1.getOutput()    //get output pins of ActivityNode
+    } catch (MissingMethodException e) {    //ActivityNodes that cannot own output pins return a "MissingMethodException" Error
+        N =[]   //If a "MissingMethodException" error occurs, leave "N" null (i.e. empty)
+    }   //close the "try" expression
+    O = N.size() //get the number of output pins, "O"
+    P = [""]*O  //create an array the size of "O"
+    if (O==0) { //check if "O" equals 0
+    } else {    //if "O" equals 0, do nothing; otherwise, do the following...
+        for (k in 0..O-1) { //for each output pin...
+            P[k] = N[k].getOutgoing()   //get the outgoing path(s), P
+        }   //close the "for" expression
+    }   //close the "if/else" expression
+    B = M.flatten() + P.flatten() //combine the flattened lists of outgoing paths
+    C = B.size() //get the number of outgoing paths, "C"
+    D = [""]*C  //create an array the size of "C" for target nodes
+    E = [""]*C  //create an array the size of "C" for target pins
+    if (C==0) { //check if "C" equals 0
+    } else {    //if "C" equals 0, do nothing; otherwise, do the following...
+        for (i in 0..C-1) { //for each output path...
+             D[i] = B[i].getTarget()    //get the target node or pin
+             R = D[i].getClass().toString() //get the class (i.e. element type) or the target
+             W.add(B[i])    //add the path to the list of outgoing paths, W
+             if (R.contains("Pin")) {   //if the target class is a pin, do the following...
+                E[i] = D[i].getOwner()  //get the owner of the pin
+                Y.add(E[i]) //add the pin's owner to the list of target nodes, Y
+             } else {   //if the target class is not a pin, do the following...   
+                Y.add(D[i]) //add the target node to the list of taget nodes, Y
+             }  //close the "if/else" expression
+         }  //close the "for" expression
+    }   //close the "if/else" expression
+}   //close the Target function definition
+Target(A)   //run the Target funtion on the input parameter, A
+J = 0   //create a variable, J, set equal to 0
+def Loop(J) {   //define a function, Loop, to recursively get all downstream ActivityNodes
+    if (J > 100) {  //if J is greater than 100, do the following...
+        println "WARNING: Target list exceeded 100."    //print error message and end Loop
+    } else {    //if J is not greater than 100, do the following...
+        if (J + 1 > Y.size()) { //if J + 1 is greater than the size of Y, do the following...
+        } else {    //do nothing; otherwise, do the following...
+            Target(Y[J])    //run the Target function on the Jth element in the Y array
+            J = J + 1   //increase J by 1
+            Loop(J) //re-run Loop with new J value
+        }   //close the "if/else" expression
+    }   //close the "if/else" expression
+}   //close the Loop function definition
+Loop(J) //run the Loop function on J
+U = W.flatten() + Y.flatten()   //combine the flattened lists of paths, W, and nodes, Y
+def Z = new LinkedHashSet(U)    //convert the combined list to a LinkedHashSet to remove duplicates
+def X = Z.toList()  //convert back to a list with duplicates removed
