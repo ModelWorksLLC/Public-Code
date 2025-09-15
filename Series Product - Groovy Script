@@ -1,0 +1,8 @@
+// Input an array of Real numeric values, X
+// Multiply each input value together
+// Output the series product, Y
+A = X.size()-1
+Y = 1
+for(i in 0..A){
+    Y = Y*X[i]
+}
