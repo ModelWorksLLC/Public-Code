@@ -1,0 +1,8 @@
+// Input array of Real numeric values, X
+// Take the compliment of the product of each input's compliment
+// Output the parallel product, Y
+A = X.size()-1
+Y = 0
+for(i in 0..A){
+    Y = 1-(1-Y)*(X[i]-1)
+}
